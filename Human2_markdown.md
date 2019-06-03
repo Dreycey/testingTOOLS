@@ -103,22 +103,28 @@ PWY-4203: volatile benzenoid biosynthesis I (ester formation)|unclassified  0.66
 <li></li>
 </ul>
 <pre><code>/scratch/dreycey/DHS_testing_programs/humann2-0.11.2/output_directory/demo_genefamilies.tsv
-
 /scratch/dreycey/DHS_testing_programs/humann2-0.11.2/output_directory/demo_pathabundance.tsv
-
 /scratch/dreycey/DHS_testing_programs/humann2-0.11.2/output_directory/demo_pathcoverage.tsv
 </code></pre>
 <h2 id="example-2">Example 2:</h2>
 <h3 id="input-files-1">Input files</h3>
-<pre><code></code></pre>
+<ul>
+<li>Similar to the previous example, except the input file is now a fasta file rather than a fastq file</li>
+</ul>
+<pre><code>examples/demo.fasta 
+</code></pre>
 <h3 id="output-files-1">Output files</h3>
 <ul>
-<li></li>
+<li>The following files result from running the command:</li>
 </ul>
-<pre><code></code></pre>
+<pre><code>/scratch/dreycey/DHS_testing_programs/humann2-0.11.2/output_directory_2/demo_genefamilies.tsv
+/scratch/dreycey/DHS_testing_programs/humann2-0.11.2/output_directory_2/demo_pathabundance.tsv
+/scratch/dreycey/DHS_testing_programs/humann2-0.11.2/output_directory_2/demo_pathcoverage.tsv
+</code></pre>
 <h3 id="commands-1">commands</h3>
 <ul>
 <li></li>
 </ul>
-<pre><code></code></pre>
+<pre><code>humann2 --input examples/demo.fasta --output output_directory_2
+</code></pre>
 
