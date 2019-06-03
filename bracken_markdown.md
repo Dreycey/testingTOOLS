@@ -84,7 +84,7 @@ Gemmata obscuriglobus 114 S 23  2 25  0.00224
 Candidatus Solibacter usitatus  332163  S 26  0 26  0.00232
 Homo sapiens  9606  S 5611  357 5968  0.53345
 </code></pre>
-<h3 id="i-had-a-problem-occur-with-bracken-finding-the-kraken2">I had a problem occur with Bracken finding the Kraken2</h3>
+<h3 id="i-had-a-problem-occur-with-bracken-finding-the-kraken2-fixed----read-bottom">I had a problem occur with Bracken finding the Kraken2 [Fixed – read bottom]</h3>
 <p>When running build:</p>
 <pre><code>./bracken-build  -k 35  -t 40 -d ../../kraken2/Kraken2DB/
 </code></pre>
