@@ -8,7 +8,7 @@
 <li>Author: Dreycey Albin</li>
 <li>Date: 05/13/2019</li>
 <li>Updates:</li>
-<li>KrakenUniq is a software for taxonomic classification. It decreases false positives by making sure reads are dispersed over the entire genome of the bacteria being classified. It does so by estimating the cardinality of a unique kmer set using a hyperloglog algorithm (HLL).</li>
+<li>KrakenUniq is a software for taxonomic classification. It decreases false positives by making sure reads are dispersed over the entire genome of the bacteria being classified. It does so by estimating the cardinality of a unique kmer set using a hyperloglog algorithm (HLL). Should be noted that the databases can be built using krakenuniq or using a standard kraken 1.0 database. There is also the flexibility to build a custom database.</li>
 <li>documentation (website): <a href="https://github.com/fbreitwieser/krakenuniq">https://github.com/fbreitwieser/krakenuniq</a></li>
 <li>documentation (publication): <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1568-0">https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1568-0</a></li>
 <li>documentation (website-manual): <a href="https://github.com/fbreitwieser/krakenuniq/blob/master/MANUAL.md">KrakenUniq MANUAL</a></li>
@@ -25,8 +25,8 @@ mkdir KrakenUniqInstallDir
 <p>OR</p>
 <p><a href="https://quay.io/organization/biocontainers">https://quay.io/organization/biocontainers</a></p>
 <h2 id="building-database-for-krakenuniq">Building database for KrakenUniq</h2>
-<p>You are able to run KrakenUniq on existing Kraken databases. Therefore, it may be more memory efficient to use the databases already built for use with Kraken (Doesn’t work with kraken2). In addition, there is the possibility of building a custom database, so as long as the user has the following files: (1) sequence files in FASTA format; (2) Mapping files; (3) NCBI taxonomy files (or custom).</p>
-<h3 id="building-database-using-standard-download">Building database using standard download</h3>
+<p>You are able to run KrakenUniq on existing Kraken databases. Therefore, it may be more memory efficient to use the databases already built for use with Kraken (<strong>Doesn’t work with kraken2</strong>). In addition, there is the possibility of building a custom database, so as long as the user has the following files: (1) sequence files in FASTA format; (2) Mapping files; (3) NCBI taxonomy files (or custom).</p>
+<h3 id="building-database-using-standard-download-was-not-able-to-build-database-using-krakenuniq">Building database using standard download [Was not able to build database using KrakenUniq?]</h3>
 <ul>
 <li>run install script</li>
 </ul>
@@ -55,7 +55,7 @@ I ran “chmod u+x {bash file name}” to get it ready for running:</li>
 </ul>
 <pre><code>chmod u+x makeDB_script.sh
 </code></pre>
-<h2 id="example">Example</h2>
+<h2 id="example-using-kraken-1.0-database">Example (using Kraken 1.0 database)</h2>
 <h3 id="downloading-reads-to-a-metagenomic-sample">Downloading reads to a metagenomic sample</h3>
 <ul>
 <li>example are soil reads from: <a href="https://www.ncbi.nlm.nih.gov/sra?linkname=bioproject_sra_all&amp;from_uid=444435">Soil reads data</a><br>
@@ -77,7 +77,7 @@ Run the following command:</li>
 <p>Got an error message: krakenuniq: database (“KrakenUniqDB_DIR/”) does not contain necessary file database.kdb</p>
 </li>
 <li>
-<p>Ah, it’s because Kraken2 DB wasn’t finished downloading</p>
+<p>Ah, it’s because Kraken2 is not compatible</p>
 </li>
 </ul>
 <hr>
