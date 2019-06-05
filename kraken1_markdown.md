@@ -44,6 +44,27 @@ kraken: database ("../../../../../rdf/Dreycey/krakenDB") does not contain necess
 <pre><code>311M  //rdf/Dreycey/krakenDB/taxonomy
 454G  //rdf/Dreycey/krakenDB
 </code></pre>
+<h2 id="notes-on-commands-detailed">Notes on commands (detailed)</h2>
+<ul>
+<li>Typical run without extra information:<br>
+for fasta:</li>
+</ul>
+<pre><code>kraken --db $DBNAME --threads NUM --classified-out classified_sequences.fasta --unclassified-out unclassified_sequences.fasta seqs.fa --output krakenoutput/krakenoutifle.txt
+</code></pre>
+<p>for fastq:</p>
+<pre><code>kraken --db $DBNAME --threads NUM --classified-out classified_sequences.fasta --unclassified-out unclassified_sequences.fasta --fastq-input seqs.fq --output krakenoutput/krakenoutifle.txt
+</code></pre>
+<p>for paired-end reads:</p>
+<pre><code>kraken --db $DBNAME --threads NUM --classified-out classified_sequences.fasta --unclassified-out unclassified_sequences.fasta --paired seqs_1.fq seqs_2.fq--output krakenoutput/krakenoutifle.txt
+</code></pre>
+<p><strong>Note</strong>: <strong>Kraken will automatically attempt to determine the file type if not specified.</strong> --gzip-compressed and --bzip2-compressed are also available.</p>
+<p>This will run Kraken normally, using the $DBNAME database, will use NUM threads, and give files with classified and unclassified sequences. One can imagine then sending these unclassified into a different program.</p>
+<ul>
+<li>Typical run without extra information:</li>
+</ul>
+<p>–min-hits<br>
+–quick<br>
+NOTE: The --quick flag stops querying k-mers in a given sequence after the first database hit. The --min-hits NUM option allows for a minimum to be specified, other than just one hit.</p>
 <h2 id="example-run-for-kraken2-using-standard-db">Example run for kraken2 (using standard DB)</h2>
 <h3 id="downloading-reads-to-a-metagenomic-sample">Downloading reads to a metagenomic sample</h3>
 <h3 id="running-kraken2-command-used">Running Kraken2 (command used)</h3>
