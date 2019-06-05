@@ -45,10 +45,8 @@ kraken: database ("../../../../../rdf/Dreycey/krakenDB") does not contain necess
 454G  //rdf/Dreycey/krakenDB
 </code></pre>
 <h2 id="notes-on-commands-detailed">Notes on commands (detailed)</h2>
-<ul>
-<li>Typical run without extra information:<br>
-for fasta:</li>
-</ul>
+<h3 id="typical-run-without-extra-information">(1) Typical run without extra information:</h3>
+<p>for fasta:</p>
 <pre><code>kraken --db $DBNAME --threads NUM --classified-out classified_sequences.fasta --unclassified-out unclassified_sequences.fasta seqs.fa --output krakenoutput/krakenoutifle.txt
 </code></pre>
 <p>for fastq:</p>
@@ -59,16 +57,21 @@ for fasta:</li>
 </code></pre>
 <p><strong>Note</strong>: <strong>Kraken will automatically attempt to determine the file type if not specified.</strong> --gzip-compressed and --bzip2-compressed are also available.</p>
 <p>This will run Kraken normally, using the $DBNAME database, will use NUM threads, and give files with classified and unclassified sequences. One can imagine then sending these unclassified into a different program.</p>
-<ul>
-<li>Typical run without extra information:</li>
-</ul>
-<p>–min-hits<br>
-–quick<br>
-NOTE: The --quick flag stops querying k-mers in a given sequence after the first database hit. The --min-hits NUM option allows for a minimum to be specified, other than just one hit.</p>
-<h2 id="example-run-for-kraken2-using-standard-db">Example run for kraken2 (using standard DB)</h2>
+<h3 id="for-a-super-quick-run-of-the-database">(2) For a super quick run of the database:</h3>
+<p>Lets say we have paired end reads, the following command can be used for a QUICK run:<br>
+for paired-end reads:</p>
+<pre><code>kraken --db $DBNAME --quick --threads NUM --classified-out classified_sequences.fasta --unclassified-out unclassified_sequences.fasta --paired seqs_1.fq seqs_2.fq--output krakenoutput/krakenoutifle.txt
+</code></pre>
+<p>If we want a higher precision, one may use:</p>
+<pre><code>kraken --db $DBNAME --quick --min-hits 3 --threads NUM --classified-out classified_sequences.fasta --unclassified-out unclassified_sequences.fasta --paired seqs_1.fq seqs_2.fq--output krakenoutput/krakenoutifle.txt
+</code></pre>
+<p>NOTE: The --quick flag stops querying k-mers in a given sequence after the first database hit. The --min-hits NUM option allows for a minimum to be specified, other than just one hit.</p>
+<hr>
+<h2 id="example-run-for-kraken-1.0-using-standard-db">Example run for kraken 1.0 (using standard DB)</h2>
 <h3 id="downloading-reads-to-a-metagenomic-sample">Downloading reads to a metagenomic sample</h3>
 <h3 id="running-kraken2-command-used">Running Kraken2 (command used)</h3>
 <h3 id="output-files">Output files</h3>
+<hr>
 <h2 id="databases-used-for-kraken1">Databases used for Kraken1</h2>
 <h3 id="off-the-shelve-databases">“Off the shelve” databases</h3>
 <ul>
@@ -174,4 +177,31 @@ done
 <pre><code> kraken-build --shrink 10000 --db kraken1_DB --new-db minikraken
 </code></pre>
 <p>NOTE: <em>The</em> <strong>" --shrink"</strong> <em>switch give the number of kmers that will be added to the database</em></p>
+<h2 id="parameters-that-can-be-used">Parameters that can be used:</h2>
+<pre><code>Options:
+--db NAME Name for Kraken DB
+(default: none)
+--threads NUM Number of threads (default: 1)
+--fasta-input Input is FASTA format
+--fastq-input Input is FASTQ format
+--gzip-compressed Input is gzip compressed
+--bzip2-compressed  Input is bzip2 compressed
+--quick Quick operation (use first hit or hits)
+--min-hits NUM  In quick op., number of hits req'd for classification
+NOTE: this is ignored if --quick is not specified
+--unclassified-out FILENAME
+Print unclassified sequences to filename
+--classified-out FILENAME
+Print classified sequences to filename
+--output FILENAME Print output to filename (default: stdout); "-" will
+suppress normal output
+--only-classified-output
+Print no Kraken output for unclassified sequences
+--preload Loads DB into memory before classification
+--paired  The two filenames provided are paired-end reads
+--check-names Ensure each pair of reads have names that agree
+with each other; ignored if --paired is not specified
+--help  Print this message
+--version Print version information
+</code></pre>
 
