@@ -13,6 +13,8 @@
 <li>documentation (publication): <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1568-0">https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1568-0</a></li>
 <li>documentation (website-manual): <a href="https://github.com/fbreitwieser/krakenuniq/blob/master/MANUAL.md">KrakenUniq MANUAL</a></li>
 </ul>
+<p>CHECK OUT THE FOLLOWING:<br>
+<a href="ftp://ftp.ccb.jhu.edu/pub/software/krakenuniq/Databases/">ftp://ftp.ccb.jhu.edu/pub/software/krakenuniq/Databases/</a></p>
 <h2 id="installation-of-krakenuniq">installation of KrakenUniq</h2>
 <pre><code>git clone https://github.com/fbreitwieser/krakenuniq
 cd krakenuniq/
@@ -81,4 +83,36 @@ Run the following command:</li>
 </li>
 </ul>
 <hr>
+<h2 id="parameters">Parameters</h2>
+<pre><code>Usage: krakenuniq --report-file FILENAME [options] &lt;filename(s)&gt;
+Options:
+--db NAME Name for Kraken DB (default: none)
+--threads NUM Number of threads (default: 1)
+--fasta-input Input is FASTA format
+--fastq-input Input is FASTQ format
+--gzip-compressed Input is gzip compressed
+--bzip2-compressed  Input is bzip2 compressed
+--hll-precision INT Precision for HyperLogLog k-mer cardinality estimation, between 10 and 18 (default: 12)
+--exact Compute exact cardinality instead of estimate (slower, requires memory proportional to cardinality!)
+--quick Quick operation (use first hit or hits)
+--min-hits NUM  In quick op., number of hits req'd for classification
+NOTE: this is ignored if --quick is not specified
+--unclassified-out FILENAME
+Print unclassified sequences to filename
+--classified-out FILENAME
+Print classified sequences to filename
+--output FILENAME Print output to filename (default: stdout); "off" will
+suppress normal output
+--only-classified-output
+Print no Kraken output for unclassified sequences
+--preload Loads DB into memory before classification
+--paired  The two filenames provided are paired-end reads
+--check-names Ensure each pair of reads have names that agree
+with each other; ignored if --paired is not specified
+--help  Print this message
+--version Print version information
+
+Experimental:
+--uid-mapping Map using UID database
+</code></pre>
 
