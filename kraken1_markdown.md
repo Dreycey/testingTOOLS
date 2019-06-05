@@ -145,6 +145,9 @@ done
 <p>(1) To build the minikrakenDB <strong>before</strong>:</p>
 <pre><code> kraken-build --build --db minikraken1_DB --threads 24 --kmer-len 31 --minimizer-len 15 --clean --max-db-size &lt;Max size in GB&gt;
 </code></pre>
+<p>OR</p>
+<pre><code>kraken-build --standard --threads 24 --db kraken1_DB --clean --clean --max-db-size &lt;Max size in GB&gt;
+</code></pre>
 <p>NOTE: <em>The</em> <strong>" --max-db-size"</strong> <em>switch give the max size for the database in GB</em></p>
 <p>(2) To build the minikrakenDB <strong>after</strong>:</p>
 <pre><code> kraken-build --shrink 10000 --db kraken1_DB --new-db minikraken
