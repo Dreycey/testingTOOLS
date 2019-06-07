@@ -131,4 +131,67 @@ Kraken2DB/database.kraken file:</p>
 rm database.kraken;
 </code></pre>
 <p>credit: <a href="https://github.com/jenniferlu717/Bracken/issues/69">https://github.com/jenniferlu717/Bracken/issues/69</a></p>
+<h2 id="parameters">Parameters:</h2>
+<pre><code>Usage: bracken -d MY_DB -i INPUT -o OUTPUT -r READ_LEN -l LEVEL -t THRESHOLD
+MY_DB  location of Kraken database
+INPUT  Kraken REPORT file to use for abundance estimation
+OUTPUT file name for Bracken default output
+READ_LEN read length to get all classifications for (default: 100)
+LEVEL  level to estimate abundance at [options: D,P,C,O,F,G,S] (default: S)
+THRESHOLD  number of reads required PRIOR to abundance estimation to perform reestimation (default: 0
+</code></pre>
+<h2 id="bracken-for-snakemakesingularity">Bracken for Snakemake&amp;Singularity</h2>
+<h3 id="install-docker-container">Install docker container</h3>
+<p>singularity pull docker://quay.io/biocontainers/bracken:2.2–py27h2d50403_1;</p>
+<h4 id="installing-the-minikraken-db-for-both-kraken1-and-kraken2">Installing the minikraken DB (for both kraken1 and kraken2)</h4>
+<h5 id="kraken-1.0">Kraken 1.0</h5>
+<pre><code>wget https://ccb.jhu.edu/software/kraken/dl/minikraken_20171019_8GB.tgz;
+tar -zxvf minikraken_20171019_8GB.tgz;
+mv  minikraken_20171019_8GB kraken1DB;
+rm minikraken_20171019_8GB.tgz;
+</code></pre>
+<h5 id="kraken-2.0">Kraken 2.0</h5>
+<pre><code>wget ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/minikraken2_v2_8GB_201904_UPDATE.tgz;
+tar -zxvf minikraken2_v2_8GB_201904_UPDATE.tgz;
+mv  minikraken2_v2_8GB_201904_UPDATE kraken2DB;
+rm minikraken2_v2_8GB_201904_UPDATE.tgz;
+</code></pre>
+<h4 id="installing-the-required-bracken-files-only-needed-for-minikraken-or-else-these-are-built">Installing the required Bracken files (only needed for minikraken or else these are built)</h4>
+<p>Download Kraken2 DB files for Bracken:</p>
+<pre><code>wget https://ccb.jhu.edu/software/bracken/dl/minikraken2_v2/database100mers.kmer_distrib;
+wget https://ccb.jhu.edu/software/bracken/dl/minikraken2_v2/database150mers.kmer_distrib;
+wget https://ccb.jhu.edu/software/bracken/dl/minikraken2_v2/database200mers.kmer_distrib;
+mv database* kraken2DB/;
+</code></pre>
+<p>Download Kraken1 DB files for Bracken:</p>
+<pre><code>wget https://ccb.jhu.edu/software/bracken/dl/minikraken_8GB_100mers_distrib.txt;
+wget https://ccb.jhu.edu/software/bracken/dl/minikraken_8GB_125mers_distrib.txt;
+wget https://ccb.jhu.edu/software/bracken/dl/minikraken_8GB_200mers_distrib.txt;
+mv minikraken_8GB_* kraken1DB/;
+</code></pre>
+<h3 id="running-bracken-1">Running Bracken</h3>
+<p>mkdir brackenoutput;</p>
+<h4 id="we-will-use-the-general-command-below">We will use the general command below:</h4>
+<p>singularity exec -B ${PWD}:/tmp/ bracken-2.2–py27h2d50403_1.simg bracken -d  &lt;path to kraken1DB. -i &lt;path to kraken1 report file. -r  -l &lt;map hits to what taxonomy level? S is for species&gt; -t  -o  ;</p>
+<h4 id="here-is-the-command-for-running-the-shakya-dataset">Here is the command for running the Shakya dataset:</h4>
+<p>export SINGULARITY_BINDPATH=${PWD}/:/tmp;</p>
+<p>Using the kraken 1.0 report file:</p>
+<pre><code>singularity exec -B ${PWD}:/tmp/ bracken-2.2--py27h2d50403_1.simg bracken -d /tmp/kraken1DB/ -i /tmp/kraken1out.report -r 100 -l S -t 0 -o /tmp/brackenoutput/dreyout_bracken_kraken1;
+</code></pre>
+<p>Using the kraken 2.0 report file:</p>
+<pre><code>singularity exec -B ${PWD}:/tmp/ bracken-2.2--py27h2d50403_1.simg bracken -d /tmp/kraken2DB/ -i /tmp/kraken2out.report -r 100 -l S -t 0 -o /tmp/brackenoutput/dreyout_bracken_kraken2;
+</code></pre>
+<h2 id="output-files">Output files:</h2>
+<pre><code>brackenoutput/dreyout_bracken_kraken1 (79 lines long)
+brackenoutput/dreyout_bracken_kraken2 (724 lines long)
+</code></pre>
+<h2 id="parameters-1">Parameters</h2>
+<pre><code>Usage: bracken -d MY_DB -i INPUT -o OUTPUT -r READ_LEN -l LEVEL -t THRESHOLD
+MY_DB  location of Kraken database
+INPUT  Kraken REPORT file to use for abundance estimation
+OUTPUT file name for Bracken default output
+READ_LEN read length to get all classifications for (default: 100)
+LEVEL  level to estimate abundance at [options: D,P,C,O,F,G,S] (default: S)
+THRESHOLD  number of reads required PRIOR to abundance estimation to perform reestimation (default: 0)
+</code></pre>
 
