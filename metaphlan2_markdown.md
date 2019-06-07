@@ -25,7 +25,6 @@ brew install metaphlan2;
 </ul>
 <pre><code>wget https://bitbucket.org/biobakery/metaphlan2/get/default.zip;
 unzip default.zip;
-
 </code></pre>
 <h2 id="basic-commands">Basic commands</h2>
 <h3 id="input">INPUT</h3>
