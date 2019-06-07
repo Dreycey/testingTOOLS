@@ -115,4 +115,44 @@ with each other; ignored if --paired is not specified
 Experimental:
 --uid-mapping Map using UID database
 </code></pre>
+<h2 id="kraken_uniq-for-snakemakesingularity">Kraken_Uniq for Snakemake&amp;Singularity</h2>
+<h3 id="install-docker-container">Install docker container</h3>
+<pre><code>singularity pull docker://quay.io/biocontainers/krakenuniq:0.5.8--pl526he860b03_0;
+</code></pre>
+<h3 id="installing-databases-for-krakenuniq">Installing databases for KrakenUniq</h3>
+<h4 id="install-minikraken1db-note-the-regular-db-isnt-too-large">Install minikraken1DB (note: the regular DB isn’t too large)</h4>
+<pre><code>wget https://ccb.jhu.edu/software/kraken/dl/minikraken_20171019_8GB.tgz;
+tar -zxvf minikraken_20171019_8GB.tgz;
+mv  minikraken_20171019_8GB kraken1DB;
+rm minikraken_20171019_8GB.tgz;
+</code></pre>
+<h4 id="installing-the-krakenuniqdb-doesnt-work-use-minikraken1db">Installing the krakenUniqDB (doesn’t work, use minikraken1DB)</h4>
+<pre><code>	scripts/krakenuniq-download --db KrakenUniqDB_DIR taxonomy;
+	scripts/krakenuniq-download --db KrakenUniqDB_DIR --threads 10 --dust refseq/bacteria refseq/archaea;
+	scripts/krakenuniq-download --db KrakenUniqDB_DIR refseq/vertebrate_mammalian/Chromosome/species_taxid=9606;
+	scripts/krakenuniq-download --db KrakenUniqDB_DIR refseq/viral/Any viral-neighbors;
+	scripts/krakenuniq-download --db KrakenUniqDB_DIR --dust microbial-nt;
+	scripts/krakenuniq-build --db KrakenUniqDB_DIR --kmer-len 31 --threads 10 --taxids-for-genomes --taxids-for-sequences;
+</code></pre>
+<p><strong>NOTE</strong>: More features available with the full kraken1DB  (500GB)</p>
+<h3 id="install-example-data-to-use">Install example data to use</h3>
+<pre><code>//rdf/software/sratoolkit.2.9.6-ubuntu64/bin/fastq-dump SRX200675 --split-files;
+</code></pre>
+<h3 id="running-kraken_uniq">Running Kraken_Uniq</h3>
+<pre><code>mkdir krakenUniqoutput;
+</code></pre>
+<h4 id="we-will-use-the-general-command-below">We will use the general command below:</h4>
+<pre><code>singularity exec -B ${PWD}/:/tmp kraken2-2.0.8_beta--pl526h6bb024c_0.simg kraken2 --db &lt;path to DB&gt; --threads &lt;NUM&gt; --paired &lt;pairedend 1&gt;  &lt;pairedned 2&gt; --output &lt;output file&gt; --report &lt;report file&gt;;
+</code></pre>
+<h4 id="here-is-the-command-for-running-the-shakya-dataset">Here is the command for running the Shakya dataset:</h4>
+<pre><code>export SINGULARITY_BINDPATH=${PWD}/:/tmp;
+</code></pre>
+<pre><code>singularity exec -B ${PWD}/:/tmp krakenuniq-0.5.8--pl526he860b03_0.simg krakenuniq --paired --db /tmp/kraken1DB/ --threads 15 --hll-precision 12 --report-file /tmp/krakenUniqoutput/krakenuniq_report.report --unclassified-out /tmp/krakenUniqoutput/krakenuniq_unclass.txt --classified-out /tmp/krakenUniqoutput/krakenuniq_class.txt -output /tmp/krakenUniqoutput/krakenuniq.out /tmp/SRX200675_1.fastq /tmp/SRX200675_2.fastq;
+</code></pre>
+<h4 id="users-should-have-access-to-the-following">Users should have access to the following:</h4>
+<pre><code>--threads &lt;INT&gt;
+--db &lt;path to Kraken1DB&gt;
+--paired (which is a switch)
+ --hll-precision (limit between 10 and 18) 
+</code></pre>
 
