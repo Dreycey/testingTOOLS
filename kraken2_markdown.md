@@ -17,7 +17,7 @@
 <li>export SINGULARITY_BINDPATH=“kraken2_bind_directory”</li>
 <li>export SINGULARITY_BINDPATH="/home/da39/Dreycey_scratch/kraken2_testing/"</li>
 </ul>
-<h2 id="building-the-kraken-database-singularity">Building the Kraken Database (singularity)</h2>
+<h2 id="building-the-kraken-2.0-database-singularity">Building the Kraken 2.0 Database (singularity)</h2>
 <pre><code>singularity exec kraken2.simg kraken2-build --standard --threads 30 --db kraken2database/
 </code></pre>
 <p><em>Note:</em> Can’t direct bindpath to the current directory for some reason.<br>
@@ -94,6 +94,16 @@ kraken2-build --download-library viral --db $DBNAME
 <li><code>UniVec</code>: NCBI-supplied database of vector, adapter, linker, and primer sequences that may be contaminating sequencing projects and/or assemblies</li>
 <li><code>UniVec_Core</code>: A subset of UniVec chosen to minimize false positive hits to the vector database</li>
 </ul>
+<h4 id="building-a-16s-rna-database">Building a 16S RNA database:</h4>
+<p>There are 3 different databases that may be used to accomplish this:</p>
+<pre><code>./KRAKEN2STUFF/kraken2-build --db rdpDB --special rdp;
+./KRAKEN2STUFF/kraken2-build --db greengenes16sDB --special greengenes;
+./KRAKEN2STUFF/kraken2-build --db silvaDB --special silva;
+</code></pre>
+<pre><code>./KRAKEN2STUFF/kraken2 --db RNADB/greengenes16sDB/ --report gg_rna16s_output.report --output gg_rna16s_out.out --paired forward.fastq reverse.fastq;
+./KRAKEN2STUFF/kraken2 --db RNADB/rdpDB/ --report rdp_rna16s_output.report --output rdp_rna16s_out.out --paired forward.fastq reverse.fastq;
+./KRAKEN2STUFF/kraken2 --db RNADB/silvaDB/ --report silva_rna16s_output.report --output silva_rna16s_out.out --paired forward.fastq reverse.fastq;
+</code></pre>
 <h2 id="example-run-for-kraken2-using-standard-db">Example run for kraken2 (using standard DB)</h2>
 <h3 id="downloading-reads-to-a-metagenomic-sample">Downloading reads to a metagenomic sample</h3>
 <ul>
@@ -105,7 +115,7 @@ Run the following command:</li>
 <p><em>Note</em>: Must have SRA tools installed to run fastq-dump:<br>
 <a href="https://github.com/ncbi/sra-tools">https://github.com/ncbi/sra-tools</a></p>
 <h3 id="running-kraken2-command-used">Running Kraken2 (command used)</h3>
-<pre><code>kraken2 --db Kraken2DB --threads 30 --classified-out classified_sequences.txt --unclassified-out unclassified_sequences.txt --fastq-input SRX3886494.fasta
+<pre><code>kraken2 --db Kraken2DB --threads 30 --classified-out classified_sequences.txt --unclassified-out unclassified_sequences.txt  SRX3886494.fasta
 </code></pre>
 <p>Krista used:</p>
 <pre><code>kraken2 --db Kraken2DB --threads 30 --classified-out classified_sequences.txt --unclassified-out unclassified_sequences.txt --fastq-input SRX3886494.fasta
@@ -116,7 +126,7 @@ Run the following command:</li>
 <pre><code>I selected the minikraken2_v2_8GB_201904_UPDATE database because it was smaller and might be good for distribution ([https://ccb.jhu.edu/software/kraken2/downloads.shtml](https://ccb.jhu.edu/software/kraken2/downloads.shtml)), but hopefully we can build this in a way that end users can use the larger standard or other custom databases with Kraken2 as needed.
 </code></pre>
 <h2 id="errors">Error(s)</h2>
-<p>I keeep experiencing the following error when building the database"</p>
+<p>I keep experiencing the following error when building the database"</p>
 <pre><code>mv: replace 'assembly_summary.txt', overriding mode 0444 (r--r--r--)? y
 Step 1/2: Performing rsync file transfer of requested files
 Rsync file transfer complete.
@@ -190,4 +200,52 @@ hopefully running the following will fix the problem</p>
 To get a full list of options, use  <code>kraken2 --help</code>.</p>
 </li>
 </ul>
+<h2 id="kraken_2-for-snakemakesingularity">Kraken_2 for Snakemake&amp;Singularity</h2>
+<h3 id="install-docker-container">Install docker container</h3>
+<pre><code>singularity pull docker://quay.io/biocontainers/kraken2:2.0.8_beta--pl526h6bb024c_0;
+</code></pre>
+<h3 id="install-minikraken2db-note-the-regular-db-isnt-too-large">Install minikraken2DB (note: the regular DB isn’t too large)</h3>
+<h4 id="installing-the-minikraken2db">Installing the minikraken2DB</h4>
+<h5 id="kraken-2.0">Kraken 2.0</h5>
+<pre><code>wget ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/minikraken2_v2_8GB_201904_UPDATE.tgz;
+tar -zxvf minikraken2_v2_8GB_201904_UPDATE.tgz;
+mv  minikraken2_v2_8GB_201904_UPDATE kraken2DB;
+rm minikraken2_v2_8GB_201904_UPDATE.tgz;
+</code></pre>
+<h4 id="installing-the-full-kraken2db">Installing the full kraken2DB</h4>
+<pre><code>singularity exec kraken2.simg kraken2-build --standard --threads 30 --db kraken2database/
+</code></pre>
+<h3 id="install-example-data-to-use">Install example data to use</h3>
+<pre><code>//rdf/software/sratoolkit.2.9.6-ubuntu64/bin/fastq-dump SRX200675 --split-files;
+</code></pre>
+<h3 id="running-kraken_2">Running Kraken_2</h3>
+<pre><code>mkdir kraken2output;
+</code></pre>
+<h4 id="we-will-use-the-general-command-below">We will use the general command below:</h4>
+<pre><code>singularity exec -B ${PWD}/:/tmp kraken2-2.0.8_beta--pl526h6bb024c_0.simg kraken2 --db &lt;path to DB&gt; --threads &lt;NUM&gt; --paired &lt;pairedend 1&gt;  &lt;pairedned 2&gt; --output &lt;output file&gt; --report &lt;report file&gt;;
+</code></pre>
+<h4 id="here-is-the-command-for-running-the-shakya-dataset">Here is the command for running the Shakya dataset:</h4>
+<pre><code>export SINGULARITY_BINDPATH=${PWD}/:/tmp;
+</code></pre>
+<pre><code>singularity exec -B ${PWD}/:/tmp kraken2-2.0.8_beta--pl526h6bb024c_0.simg kraken2 --db /tmp/kraken2DB --threads 15 --paired /tmp/SRX200675_1.fastq.gz /tmp/SRX200675_2.fastq.gz --output /tmp/kraken2output/krakenoutfile.txt --report /tmp/kraken2output/krakenoutfile.report --unclassified-out /tmp/kraken2output/unclassified_sequences_#.fq --use-names --confidence 0  --classified-out /tmp/kraken2output/classified_sequences_#.fq;
+</code></pre>
+<h4 id="users-should-have-access-to-the-following">Users should have access to the following:</h4>
+<pre><code>--threads
+--db
+--paired (which is a switch)
+</code></pre>
+<h4 id="notes">Notes:</h4>
+<pre><code>Adding the following threw an error:
+--unclassified-out /tmp/kraken2output/unclassified_sequences.txt --classified-out /tmp/kraken2output/classified_sequences.txt ;
+error:
+Processed 10000 sequences (3549544 bp) ...classify: Paired filename format missing # character: /tmp/kraken2output/classified_sequences_1.txt
+</code></pre>
+<h3 id="output-files-1">Output files</h3>
+<pre><code>classified_sequences__1.fq 
+krakenoutfile.report  
+unclassified_sequences__1.fq
+classified_sequences__2.fq  
+krakenoutfile.txt 
+unclassified_sequences__2.fq
+</code></pre>
 
