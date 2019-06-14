@@ -81,6 +81,22 @@ TAXDUMP=///home/da39/Dreycey_scratch/DHS_testing_programs/metaWRAP/NCBI_tax
 <li>had to gzip -d {file.fq.gz} the files, then change the name from file.fq to file.fastq</li>
 <li>Spits out: BINNING PIPELINE SUCCESSFULLY FINISHED!!!</li>
 </ul>
+<h4 id="parameters-for-binning">Parameters for binning</h4>
+<pre><code>Options:
+-a STR  metagenomic assembly file
+-o STR  output directory
+-t INT  number of threads (default=1)
+-m INT  amount of RAM available (default=4)
+-l INT  minimum contig length to bin (default=1000bp). Note: metaBAT will default to 1500bp minimum
+--metabat2  bin contigs with metaBAT2
+--metabat1  bin contigs with the original metaBAT
+--maxbin2  bin contigs with MaxBin2
+--concoct  bin contigs with CONCOCT
+--universal  use universal marker genes instead of bacterial markers in MaxBin2 (improves Archaea binning)
+--run-checkm  immediately run CheckM on the bin results (requires 40GB+ of memory)
+--single-end  non-paired reads mode (provide *.fastq files)
+--interleaved  the input read files contain interleaved paired-end reads
+</code></pre>
 <h3 id="kraken">Kraken</h3>
 <pre><code>metawrap kraken -s all -t 30 -o krakenoutput_2/ SRR606249_subset10_1.fastq SRR606249_subset10_2.fastq
 </code></pre>
@@ -196,5 +212,47 @@ NCS_067_INTRO3_paired_scaffolds.blobplot NCS_067_INTRO3_paired_scaffolds.fasta.4
 NCS_067_INTRO3_paired_scaffolds.fasta.1.bt2  NCS_067_INTRO3_paired_scaffolds.fasta.rev.2.bt2
 
 NCS_067_INTRO3_paired_scaffolds.fasta.2.bt2  NCS_067_INTRO3_paired_scaffolds.nt.1e-5.megablast
+</code></pre>
+<pre><code>singularity pull docker://quay.io/biocontainers/metawrap:1.1--0
+</code></pre>
+<h3 id="install-example-data-to-use">Install example data to use</h3>
+<p>//rdf/software/sratoolkit.2.9.6-ubuntu64/bin/fastq-dump SRX200675 --split-files;</p>
+<h3 id="quant_bins">QUANT_BINS</h3>
+<pre><code>metawrap quant_bins -b binning_ouput/concoct_bins/ -a binning_ouput/work_files/assembly.fa -t 27 -o quant_bins SRR606249_subset10_1.fastq SRR606249_subset10_2.fastq
+</code></pre>
+<h3 id="bin-classification">Bin Classification</h3>
+<ul>
+<li>The example below is using the binning generating using “concoct”</li>
+</ul>
+<pre><code>metawrap classify_bins -b binning_ouput/concoct_bins/ -o bin_classify_2/ -t 50
+</code></pre>
+<h3 id="bin-annotation">Bin Annotation</h3>
+<pre><code>metawrap annotate_bins -b binning_ouput/concoct_bins/ -t 15 -o annotaed_bins_out
+</code></pre>
+<h3 id="bin-refinement">Bin Refinement</h3>
+<ul>
+<li>Did not run the following, but assuming this should work:</li>
+</ul>
+<pre><code>metawrap bin_refinement -t 15 -o bin_refinement_out -m 40 -c 70 -x 1- -A binning_ouput/concoct_bins/
+</code></pre>
+<h4 id="parameters">Parameters</h4>
+<pre><code>Options:
+-o STR  output directory
+-t INT  number of threads (default=1)
+-m INT  memory available (default=40)
+-c INT  minimum % completion of bins [should be &gt;50%] (default=70)
+-x INT  maximum % contamination of bins that is acceptable (default=10)
+-A STR  folder with metagenomic bins (files must have .fa or .fasta extension)
+-B STR  another folder with metagenomic bins
+-C STR  another folder with metagenomic bins
+--skip-refinement  dont use binning_refiner to come up with refined bins based on combinations of binner outputs
+--skip-checkm  dont run CheckM to assess bins
+--skip-consolidation  choose the best version of each bin from all bin refinement iteration
+--keep-ambiguous  for contigs that end up in more than one bin, keep them in all bins (default: keeps them only in the best bin)
+--remove-ambiguous  for contigs that end up in more than one bin, remove them in all bins (default: keeps them only in the best bin)
+--quick  adds --reduced_tree option to checkm, reducing runtime, especially with low memory
+</code></pre>
+<h3 id="reassembling-the-bins">Reassembling the bins</h3>
+<pre><code>metawrap reassemble_bins -b binning_ouput/concoct_bins/ -o reassemble_bins_out -1 SRR606249_subset10_1.fastq -2 SRR606249_subset10_2.fastq -t 20 -m 40 -c 70 -x 10 -l 500
 </code></pre>
 
