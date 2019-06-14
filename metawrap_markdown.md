@@ -255,4 +255,21 @@ NCS_067_INTRO3_paired_scaffolds.fasta.2.bt2  NCS_067_INTRO3_paired_scaffolds.nt.
 <h3 id="reassembling-the-bins">Reassembling the bins</h3>
 <pre><code>metawrap reassemble_bins -b binning_ouput/concoct_bins/ -o reassemble_bins_out -1 SRR606249_subset10_1.fastq -2 SRR606249_subset10_2.fastq -t 20 -m 40 -c 70 -x 10 -l 500
 </code></pre>
+<h4 id="reassembling-the-bins-parameters">Reassembling the bins (Parameters)</h4>
+<pre><code>Usage: metaWRAP reassemble_bins [options] -o output_dir -b bin_folder -1 reads_1.fastq -2 reads_2.fastq
+Options:
+-b STR  folder with metagenomic bins
+-o STR  output directory
+-1 STR  forward reads to use for reassembly
+-2 STR  reverse reads to use for reassembly
+-t INT  number of threads (default=1)
+-m INT  memory in GB (default=40)
+-c INT  minimum desired bin completion % (default=70)
+-x INT  maximum desired bin contamination % (default=10)
+-l INT  minimum contig length to be included in reassembly (default=500)
+--strict-cut-off  maximum allowed SNPs for strict read mapping (default=2)
+--permissive-cut-off  maximum allowed SNPs for permissive read mapping (default=5)
+--skip-checkm  dont run CheckM to assess bins
+--parallel  run spades reassembly in parallel, but only using 1 thread per bin
+</code></pre>
 
